@@ -7,14 +7,16 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 
 class MainActivity : AppCompatActivity() {
     private var maxNumber: Int = 75
     private lateinit var maxNumberEditText: EditText
     private lateinit var registerMaxNumberButton: Button
     private lateinit var nextNumberButton: Button
+    private lateinit var currentNumber: TextView
+    private var recodesList = mutableListOf<Int>()
 
-    //    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -34,6 +36,8 @@ class MainActivity : AppCompatActivity() {
         nextNumberButton.setOnClickListener {
             onClickNextNumber()
         }
+
+        currentNumber = findViewById(R.id.currentNumber)
     }
 
 //    override fun onClick(v: View?) {
@@ -43,8 +47,21 @@ class MainActivity : AppCompatActivity() {
 //        Log.d("MainActivity", "m axNumber: $maxNumber")
 //    }
 
-
     private fun onClickNextNumber() {
-        Log.d("MainActivity", "onClickNextNumber")
+        val randomNumber: Double = maxNumber * Math.random()
+        val nextNumber: Int = createRandomNumber()
+
+        Log.d("MainActivity", "maxNumber: $maxNumber")
+        Log.d("MainActivity", "onClickNextNumber: $randomNumber")
+        Log.d("MainActivity", nextNumber.toString())
+        currentNumber.text = nextNumber.toString()
+
+        recodesList.add(nextNumber)
+        Log.d("MainActivity", "onClickNextNumber: $recodesList")
+    }
+
+    private fun createRandomNumber() : Int {
+        val randomNumber: Double = maxNumber * Math.random()
+        return randomNumber.toInt() + 1
     }
 }
