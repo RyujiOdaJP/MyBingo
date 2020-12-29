@@ -1,10 +1,8 @@
 package com.example.mybingo
 
-import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -15,7 +13,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var registerMaxNumberButton: Button
     private lateinit var nextNumberButton: Button
     private lateinit var currentNumber: TextView
-    private var recodesList = mutableListOf<Int>()
+    private var history = mutableListOf<Int>()
+    private lateinit var historyTextView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,26 +37,28 @@ class MainActivity : AppCompatActivity() {
         }
 
         currentNumber = findViewById(R.id.currentNumber)
+
+        historyTextView = findViewById(R.id.history)
     }
 
-//    override fun onClick(v: View?) {
-//        val maxNumberString = this.maxNumberEditText.text.toString()
-//        maxNumber = maxNumberString.toInt()
-//
-//        Log.d("MainActivity", "m axNumber: $maxNumber")
-//    }
-
     private fun onClickNextNumber() {
-        val randomNumber: Double = maxNumber * Math.random()
-        val nextNumber: Int = createRandomNumber()
 
+        var nextNumber: Int = createRandomNumber()
+        while (history.contains(nextNumber)) {
+            Log.d("MainActivity", "重複したので再生成")
+            nextNumber = createRandomNumber()
+        }
+
+        val nextNumberString = nextNumber.toString()
         Log.d("MainActivity", "maxNumber: $maxNumber")
-        Log.d("MainActivity", "onClickNextNumber: $randomNumber")
-        Log.d("MainActivity", nextNumber.toString())
-        currentNumber.text = nextNumber.toString()
+        Log.d("MainActivity", nextNumberString)
 
-        recodesList.add(nextNumber)
-        Log.d("MainActivity", "onClickNextNumber: $recodesList")
+        currentNumber.text = nextNumberString
+
+        history.add(nextNumber)
+        Log.d("MainActivity", "onClickNextNumber: $history")
+
+        historyTextView.text = history.toString()
     }
 
     private fun createRandomNumber() : Int {
